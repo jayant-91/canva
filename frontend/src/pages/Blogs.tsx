@@ -2,12 +2,9 @@ import { BlogCard } from "../components/BlogCard";
 import { Appbar } from "../components/Appbar";
 import { useBlogs } from "../hooks";
 import { BlogSkeliton } from "../components/BlogSkeliton";
-import { useNavigate } from "react-router-dom";
 
 export const Blogs = () => {
-	const navigate = useNavigate();
-	try{
-		const { loading, blogs } = useBlogs();
+	const { loading, blogs } = useBlogs();
 
 	return (
 		<div>
@@ -39,8 +36,4 @@ export const Blogs = () => {
 			)}
 		</div>
 	);
-	} catch(err) {
-		navigate('/signin');
-	}
-	
 };

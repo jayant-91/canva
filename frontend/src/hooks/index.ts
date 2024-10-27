@@ -19,7 +19,6 @@ export const useBlogs = () => {
 
 	useEffect(() => {
 		const fetchdata = () => {
-			try {
 				const token = localStorage.getItem("token");
 				axios
 					.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
@@ -31,9 +30,6 @@ export const useBlogs = () => {
 						setBlogs(response.data.blogs);
 						setLoading(false);
 					});
-			} catch (err) {
-				navigate("/signin");
-			}
 		};
         fetchdata();
 	}, []);
