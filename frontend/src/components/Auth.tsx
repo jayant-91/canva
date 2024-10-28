@@ -7,6 +7,7 @@ import { BACKEND_URL } from "../config";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 	const [postInputs, setPostInputs] = useState<signupInput>({
 		name: "",
 		username: "",
@@ -15,13 +16,17 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
 
     async function sendRequest() {
         try {
+            setLoading(true);
             const url = `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`;
             const response = await axios.post(url, postInputs);
+            console.log(response);
             const jwt = response.data.jwt;
             localStorage.setItem("token", jwt);
+            setLoading(false);
             navigate("/blogs")
         } catch(e) {
             // alert the user here the request failed 
+            setLoading(false);
             alert(`something went wrong can't ${type === "signin" ? "signin" : "signup"}`);
         }
     }
@@ -80,7 +85,12 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
                             }}
                             type="password"
                         />
-                        <button onClick={sendRequest} type="button" className="mt-6 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">{type === "signup" ? "Sign Up" : "Sign In"}</button>
+                        <button onClick={sendRequest} type="button" className="mt-6 w-full flex justify-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                            {loading ? 
+                                (<img className="w-5 h-5 animate-spin" src="https://www.svgrepo.com/show/70469/loading.svg" alt="Loading icon"></img>) :
+                                 (type === "signup" ? "Sign Up" : "Sign In") 
+                            }
+                        </button>
                     </div>
                 </div>
 			</div>

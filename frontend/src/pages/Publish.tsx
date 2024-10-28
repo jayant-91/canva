@@ -22,20 +22,26 @@ export const Publish = () => {
                     setContent(e.target.value)
                 }} />
                 <button onClick={async () => {
+                    const token = localStorage.getItem('token');
+                    if(!token) {
+                        console.log("ok");
+                        navigate(`/signin`);
+                        return;
+                    }
+
                     try{
-                        const token = `Bearer ${localStorage.getItem('token')}`;
-                    const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
+                        const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
                         title: title,
                         content: content
                         
-                    }, {
-                        headers: {
-                            Authorization: token
-                        }
-                    });
-                    navigate(`/blog/${response.data.id}`)
+                        }, {
+                            headers: {
+                                Authorization: `Barer ${token}`
+                            }
+                        });
+                        navigate(`/blog/${response.data.id}`)
                     } catch (err) {
-                        navigate('/signin');
+                       return  navigate('/signin');
                     }
                     
                     }} type="submit" className="mt-4 inline-flex items-center px-3 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">
